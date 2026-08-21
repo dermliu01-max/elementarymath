@@ -37,6 +37,19 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .zy .zt{line-height:1;margin-left:.08em;padding-bottom:.12em}
 .zyline{line-height:2.25}
 
+/* ---------- 教材補充・教學段 ---------- */
+.lesson{background:#fff;border:3px solid var(--line);border-radius:18px;margin-bottom:12px;overflow:hidden}
+.lesson.on{border-color:var(--blue)}
+.lesson .lhead{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:15px 18px;font-size:22px;font-weight:900;text-align:left;background:#fff}
+.lesson.on .lhead{background:var(--blue-l);color:var(--blue)}
+.lesson .lmark{font-size:20px;color:var(--ink2)}
+.lesson .lbody{padding:6px 20px 20px;border-top:2px solid var(--line)}
+.lesson .lp{font-size:21px;line-height:2;margin:12px 0}
+.lesson .leg{background:#FAFAF7;border:2px dashed var(--line);border-radius:14px;padding:12px 16px;margin:12px 0}
+.lesson .leg div{font-size:22px;line-height:2;font-weight:700}
+.lesson .ltip{background:var(--orange-l);border:3px solid var(--orange);border-radius:14px;padding:12px 16px;font-size:20px;line-height:1.95;margin-top:12px}
+
 /* ---------- 逐步教學 ---------- */
 .teach{margin-top:16px;border:3px solid var(--purple);background:var(--purple-l);border-radius:18px;padding:16px 18px}
 .teach h4{margin:0 0 10px;font-size:21px;font-weight:900;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -660,6 +673,202 @@ const PAST2 = [
 PAST.push.apply(PAST, PAST2);
 
 /* =========================================================================
+   ★ 小二教材補充：主題式教學單元（教學內容 + 教具 + 練習）
+   ========================================================================= */
+const SUPP = [
+{id:"s1", name:"比大小", emoji:"⚖️", color:"blue",
+ sub:"大於 >、小於 <、等於 =",
+ goal:"看懂並正確寫出 >、<、=，會比兩位數，也會比「算式」的大小。",
+ tool:"size",
+ lessons:[
+  {t:"① 三個符號長什麼樣子",
+   p:["「>」念作 <b>大於</b>：8 > 5，讀作「8 大於 5」。",
+      "「<」念作 <b>小於</b>：5 < 8，讀作「5 小於 8」。",
+      "「=」念作 <b>等於</b>：7 = 7，兩邊一樣多。"],
+   tip:"口訣：<b>大嘴巴要吃大數</b>！開口張開的那一邊，一定對著比較大的數。"},
+  {t:"② 兩位數怎麼比",
+   p:["<b>第一步</b>：先比十位。十位大的那個數就比較大。",
+      "<b>第二步</b>：十位一樣的時候，再比個位。"],
+   eg:["63 > 58　→ 十位 6 比 5 大，不用看個位。",
+       "47 < 49　→ 十位都是 4，再看個位 7 < 9。",
+       "70 > 69　→ 十位 7 比 6 大（不要被個位的 9 騙了！）"],
+   tip:"最常犯的錯：只看個位就決定。一定要<b>先看十位</b>。"},
+  {t:"③ 用數線看大小",
+   p:["把數排在數線上，<b>愈右邊的數愈大</b>。",
+      "38 在 45 的左邊，所以 38 < 45。"],
+   tip:"可以打開下面的教具，用數線或百數表指給孩子看。"},
+  {t:"④ 算式也可以比大小",
+   p:["兩邊都是算式時，<b>先各自算出答案，再比大小</b>。"],
+   eg:["30 + 5 ○ 40 － 2　→ 35 ○ 38　→ 35 < 38",
+       "26 + 14 ○ 55 － 15　→ 40 ○ 40　→ 40 = 40",
+       "9 + 9 ○ 20 － 3　→ 18 ○ 17　→ 18 > 17"],
+   tip:"這就是卓越盃常考的題型：把「等號兩邊一樣多」延伸成「哪一邊比較大」。"},
+  {t:"⑤ ○ 裡可以填哪些數",
+   p:["4○ > 45　→ 十位一樣，個位要比 5 大 → ○ 可以填 6、7、8、9（共 4 個）。",
+      "○3 < 53　→ 十位要比 5 小 → ○ 可以填 1、2、3、4（0 不能當十位）。"],
+   tip:"問「有幾個」的時候，要把可以填的數<b>一個一個列出來再數</b>，不要用猜的。"},
+  {t:"⑥ 容易做錯的地方",
+   p:["符號方向寫反 → 用「大嘴巴吃大數」檢查一次。",
+      "只比個位 → 一定要先比十位。",
+      "看到「比…多／少」就直接加減，沒有看清楚是誰比誰。"]}
+ ]},
+
+{id:"s2", name:"兩步驟的加減", emoji:"🔗", color:"green",
+ sub:"加加、減減、加減混合、倒著算",
+ goal:"看懂一題裡有「兩次變化」，會照順序算，也會從答案倒推回去。",
+ tool:"two",
+ lessons:[
+  {t:"① 什麼叫「兩步驟」",
+   p:["題目裡出現<b>兩次變化</b>（先…然後又…），就是兩步驟。",
+      "可以畫成一條<b>流程圖</b>：　起點 →（第一次變化）→ 中間 →（第二次變化）→ 結果"],
+   eg:["小明有 25 元，媽媽給他 18 元，他又花掉 12 元。",
+       "25 →（＋18）→ 43 →（－12）→ 31"],
+   tip:"畫流程圖是最好的習慣：先把「中間那個數」算出來、寫下來，再算下一步。"},
+  {t:"② 加加型（兩次都變多）",
+   p:["例：原本 25 元，媽媽給 18 元，又存了 12 元。",
+      "25 ＋ 18 ＝ 43　→　43 ＋ 12 ＝ 55（元）"],
+   tip:"小技巧：先湊整十比較快　25＋（18＋12）＝ 25＋30 ＝ 55。"},
+  {t:"③ 減減型（兩次都變少）",
+   p:["例：原本 80 元，買筆 25 元，又買本子 18 元。",
+      "80 － 25 ＝ 55　→　55 － 18 ＝ 37（元）"],
+   tip:"另一種算法：先把花掉的合起來 25＋18 ＝ 43，再 80 － 43 ＝ 37。兩種算出來要一樣！"},
+  {t:"④ 混合型（一次多、一次少）",
+   p:["例：有 56 張貼紙，送人 18 張，又買了 25 張。",
+      "56 － 18 ＝ 38　→　38 ＋ 25 ＝ 63（張）",
+      "<b>照題目發生的順序，由左往右一步一步算。</b>"],
+   tip:"不可以自己換順序！先送出去再買回來，和先買再送，中間的數不一樣。"},
+  {t:"⑤ 倒著算（逆推）",
+   p:["題目給的是<b>結果</b>，要找<b>原本</b>的時候，就把箭頭反過來走。",
+      "原則：<b>加變減、減變加</b>，而且要<b>從最後一步先還原</b>。"],
+   eg:["？ →（＋18）→ ？ →（－9）→ 34",
+       "先還原最後一步：34 ＋ 9 ＝ 43",
+       "再還原第一步：43 － 18 ＝ 25　→ 原本是 25"],
+   tip:"算完一定要<b>正著驗算一次</b>：25＋18＝43，43－9＝34 ✓"},
+  {t:"⑥ 容易做錯的地方",
+   p:["只算了一步就寫答案（少算一步）。",
+      "順序算反了。",
+      "倒著算時忘記把加減互換。",
+      "「比…多／少」沒看清楚是誰比誰。"]}
+ ]},
+
+{id:"s3", name:"（待補充）", emoji:"➕", color:"purple", sub:"你想教什麼，跟我說就補上", soon:true},
+{id:"s4", name:"（待補充）", emoji:"➕", color:"pink",   sub:"例如：幾個幾、平分、週期規律…", soon:true}
+];
+
+/* ---- 補充單元的練習題（掛在 s1 / s2 底下） ---- */
+UNITS.push(
+ {id:"s1", name:"比大小", emoji:"⚖️", color:"blue",  supp:true, desc:"大於、小於、等於", points:["認識 >、<、= 三個符號","兩位數比大小：先比十位再比個位","算式的比大小","○ 裡可以填哪些數"]},
+ {id:"s2", name:"兩步驟的加減", emoji:"🔗", color:"green", supp:true, desc:"加加、減減、混合、逆推", points:["兩次變化的題目","照順序一步一步算","畫流程圖找中間的數","倒著算回原本的數"]}
+);
+
+BANK.push(
+/* ===== s1 比大小 ===== */
+{id:"s1-1",u:"s1",lv:1,t:"c",q:"「8 ○ 5」中間應該填哪一個符號？",o:[">","<","=","＋"],a:0,hint:"大嘴巴要吃大數，開口對著大的。",exp:"8 比 5 大，所以是 8 > 5，讀作「8 大於 5」。"},
+{id:"s1-2",u:"s1",lv:1,t:"c",q:"「47 ○ 49」中間應該填哪一個符號？",o:[">","<","=","不一定"],a:1,hint:"十位一樣的時候，就要看個位。",exp:"十位都是 4，再比個位：7 < 9，所以 47 < 49。"},
+{id:"s1-3",u:"s1",lv:2,t:"c",q:"「70 ○ 69」中間應該填哪一個符號？",o:[">","<","=","不一定"],a:0,hint:"不要被個位的 9 騙了，先看十位！",exp:"十位：7 > 6，所以 70 > 69。個位再大也沒有用，要先比十位。"},
+{id:"s1-4",u:"s1",lv:2,t:"c",q:"下面哪一個式子是<b>錯</b>的？",o:["35 < 53","28 > 82","64 = 64","19 < 20"],a:1,hint:"一個一個檢查十位。",exp:"28 的十位是 2，82 的十位是 8，2 < 8，所以應該是 28 < 82。\n其他三個都對。"},
+{id:"s1-5",u:"s1",lv:2,t:"f",q:"把 46、64、40、60 由小到大排，最小的是多少？",a:"40",hint:"先比十位，十位一樣再比個位。",exp:"十位：40 和 46 是 4，60 和 64 是 6。\n40 < 46 < 60 < 64，最小的是 40。"},
+{id:"s1-6",u:"s1",lv:2,t:"c",q:"「30 ＋ 5 ○ 40 － 2」中間應該填哪一個符號？",o:[">","<","=","無法比較"],a:1,hint:"兩邊先各自算出來，再比大小。",exp:"左邊 30＋5 ＝ 35，右邊 40－2 ＝ 38。\n35 < 38，所以填「<」。"},
+{id:"s1-7",u:"s1",lv:2,t:"c",q:"「26 ＋ 14 ○ 55 － 15」中間應該填哪一個符號？",o:[">","<","=","無法比較"],a:2,hint:"先算左邊，再算右邊。",exp:"左邊 26＋14 ＝ 40，右邊 55－15 ＝ 40。\n兩邊一樣多，所以填「=」。"},
+{id:"s1-8",u:"s1",lv:3,t:"f",q:"「4□ > 45」，□ 裡可以填幾個不同的數字？",a:"4",hint:"十位一樣，所以要比個位。把可以填的一個一個寫出來。",exp:"十位都是 4，所以個位要比 5 大。\n可以填 6、7、8、9 → 共 4 個。"},
+{id:"s1-9",u:"s1",lv:3,t:"f",q:"「□3 < 53」，□ 裡可以填幾個不同的數字？（□ 是十位）",a:"4",hint:"十位不能填 0，不然就變成一位數了。",exp:"個位都是 3，所以十位要比 5 小。\n可以填 1、2、3、4（0 不能當十位）→ 共 4 個。"},
+{id:"s1-10",u:"s1",lv:3,t:"c",q:"下面哪一個說法是<b>對</b>的？",o:["十位是 5 的數，一定比十位是 4 的數大","個位是 9 的數，一定比個位是 1 的數大","70 比 68 小","兩位數一定比 100 大"],a:0,hint:"一個一個舉例子檢查看看。",exp:"(1) 十位 5 的數是 50～59，十位 4 的數是 40～49，一定比較大 ✓\n(2) 錯：19 的個位是 9，91 的個位是 1，但 19 < 91。\n(3) 錯：70 > 68。\n(4) 錯：兩位數最大只有 99，比 100 小。"},
+{id:"s1-11",u:"s1",lv:3,t:"c",q:"小明有 3 個 10 元和 4 個 5 元，小華有 1 個 50 元。下面哪一個說法是對的？",o:["小明比較多","小華比較多","一樣多","無法比較"],a:2,hint:"先把兩個人的錢各自算出來，再比大小。",exp:"小明：10×3 ＝ 30，5×4 ＝ 20，合起來 50 元。\n小華：50 元。\n50 = 50，兩人一樣多。"},
+{id:"s1-12",u:"s1",lv:3,t:"f",q:"一個兩位數比 57 大、又比 60 小，這個數可能有幾個？",a:"2",hint:"把 57 和 60 中間的數列出來。",exp:"比 57 大又比 60 小的數有 58、59。\n一共 2 個。"},
+{id:"s1-13",u:"s1",lv:3,t:"c",q:"下面哪一個算式的答案<b>最大</b>？",o:["45 ＋ 27","90 － 25","38 ＋ 33","52 ＋ 19"],a:0,hint:"四個都算出來，再排大小。",exp:"45＋27 ＝ 72\n90－25 ＝ 65\n38＋33 ＝ 71\n52＋19 ＝ 71\n最大的是 72。"},
+{id:"s1-14",u:"s1",lv:3,t:"c",q:"甲比乙大，乙比丙大，丁比甲大。四個數中最大的是哪一個？",o:["甲","乙","丙","丁"],a:3,hint:"把它們由大到小排成一列看看。",exp:"甲 > 乙 > 丙，而丁 > 甲。\n所以順序是 丁 > 甲 > 乙 > 丙，最大的是丁。"},
+
+/* ===== s2 兩步驟的加減 ===== */
+{id:"s2-1",u:"s2",lv:1,t:"f",q:"25 ＋ 18 ＋ 12 = ?",a:"55",hint:"先算前面兩個，再加最後一個；或先湊整十。",exp:"25 ＋ 18 ＝ 43，43 ＋ 12 ＝ 55。\n也可以先湊整十：18＋12 ＝ 30，25＋30 ＝ 55。"},
+{id:"s2-2",u:"s2",lv:1,t:"f",q:"80 － 25 － 18 = ?",a:"37",hint:"一步一步減，或先把要減掉的合起來。",exp:"80 － 25 ＝ 55，55 － 18 ＝ 37。\n也可以：25＋18 ＝ 43，80 － 43 ＝ 37。"},
+{id:"s2-3",u:"s2",lv:2,t:"f",q:"56 － 18 ＋ 25 = ?",a:"63",hint:"由左往右，一步一步算。",exp:"56 － 18 ＝ 38\n38 ＋ 25 ＝ 63"},
+{id:"s2-4",u:"s2",lv:2,t:"c",q:"小明有 25 元，媽媽給他 18 元，他又花掉 12 元。小明現在有多少元？",o:["31 元","55 元","19 元","43 元"],a:0,hint:"畫流程圖：25 →（＋18）→ ? →（－12）→ ?",exp:"25 ＋ 18 ＝ 43（媽媽給完之後）\n43 － 12 ＝ 31（花掉之後）\n答案是 31 元。"},
+{id:"s2-5",u:"s2",lv:2,t:"c",q:"車上原本有 32 人，第一站下車 9 人，第二站又上車 15 人。現在車上有幾人？",o:["38 人","26 人","56 人","8 人"],a:0,hint:"下車要減、上車要加，照順序做。",exp:"32 － 9 ＝ 23（第一站之後）\n23 ＋ 15 ＝ 38（第二站之後）"},
+{id:"s2-6",u:"s2",lv:2,t:"f",q:"小美有 90 元，買了 28 元的筆和 35 元的本子，還剩多少元？",a:"27",hint:"先算花掉多少，再從 90 減掉。",exp:"28 ＋ 35 ＝ 63（一共花掉）\n90 － 63 ＝ 27 元。\n（也可以 90－28 ＝ 62，62－35 ＝ 27，答案一樣。）"},
+{id:"s2-7",u:"s2",lv:3,t:"f",q:"□ ＋ 18 － 9 = 34，□ 是多少？",a:"25",hint:"倒著走：加變減、減變加，而且要從最後一步先還原。",exp:"從結果 34 倒推：\n先還原「－9」→ 34 ＋ 9 ＝ 43\n再還原「＋18」→ 43 － 18 ＝ 25\n驗算：25＋18 ＝ 43，43－9 ＝ 34 ✓"},
+{id:"s2-8",u:"s2",lv:3,t:"c",q:"一個數先減 15，再加 28，結果是 50。這個數原本是多少？",o:["37","63","93","7"],a:0,hint:"倒著算：先把最後加的減回去，再把減的加回去。",exp:"50 － 28 ＝ 22\n22 ＋ 15 ＝ 37\n驗算：37－15 ＝ 22，22＋28 ＝ 50 ✓"},
+{id:"s2-9",u:"s2",lv:3,t:"f",q:"小華有一些貼紙，送給妹妹 12 張，又跟同學換到 8 張，現在有 26 張。他原本有幾張？",a:"30",hint:"倒著走：把換到的減掉，把送出去的加回來。",exp:"26 － 8 ＝ 18（還沒換到之前）\n18 ＋ 12 ＝ 30（還沒送出去之前）\n驗算：30－12 ＝ 18，18＋8 ＝ 26 ✓"},
+{id:"s2-10",u:"s2",lv:3,t:"c",q:"下面哪一個說法是<b>對</b>的？",o:["56 － 18 ＋ 25 和 56 ＋ 25 － 18 答案一樣","56 － 18 ＋ 25 和 56 － 25 ＋ 18 答案一樣","兩步驟的題目可以隨便換順序","減法可以交換前後，答案不變"],a:0,hint:"把每一個都算算看。",exp:"56－18＋25 ＝ 63；56＋25－18 ＝ 81－18 ＝ 63 → 一樣 ✓\n56－25＋18 ＝ 31＋18 ＝ 49 → 不一樣 ✗\n加的和減的「各自」可以調換位置，但不能把加變成減。"},
+{id:"s2-11",u:"s2",lv:3,t:"c",q:"哥哥和弟弟原本的錢一樣多。哥哥用了 15 元，弟弟用了 8 元。現在誰的錢比較多？多多少？",o:["弟弟多 7 元","哥哥多 7 元","一樣多","弟弟多 23 元"],a:0,hint:"原本一樣多，誰花得少誰就剩得多。",exp:"原本一樣多，哥哥花 15、弟弟花 8。\n弟弟花得比較少 15 － 8 ＝ 7 元，\n所以現在弟弟比哥哥多 7 元。"},
+{id:"s2-12",u:"s2",lv:3,t:"f",q:"果汁一瓶 24 元，餅乾一包 18 元。小安買了 1 瓶果汁和 1 包餅乾，付了 100 元，找回多少元？",a:"58",hint:"先算買東西一共多少錢，再算找錢。",exp:"24 ＋ 18 ＝ 42（一共要付）\n100 － 42 ＝ 58 元。"},
+{id:"s2-13",u:"s2",lv:3,t:"c",q:"停車場原本有一些車，開走 17 輛後又開進來 9 輛，現在有 25 輛。原本有幾輛車？",o:["33 輛","17 輛","51 輛","41 輛"],a:0,hint:"倒著走：先把開進來的減掉，再把開走的加回來。",exp:"25 － 9 ＝ 16（開進來之前）\n16 ＋ 17 ＝ 33（開走之前）\n驗算：33－17 ＝ 16，16＋9 ＝ 25 ✓"},
+{id:"s2-14",u:"s2",lv:3,t:"f",q:"小明第一天存 18 元，第二天比第一天多存 7 元，兩天一共存了多少元？",a:"43",hint:"先算第二天存多少，再把兩天加起來。",exp:"第二天：18 ＋ 7 ＝ 25 元\n兩天合計：18 ＋ 25 ＝ 43 元。"}
+);
+
+/* =========================================================================
+   ★ 各單元題目擴充（參考卓越盃「敘述型選擇題」的出題方式）
+   ========================================================================= */
+BANK.push(
+/* ---- u1 整數與序數 ---- */
+{id:"u1-14",u:"u1",lv:2,t:"c",q:"下面哪一個說法是<b>對</b>的？",o:["十位是 5 的數，一定比十位是 4 的數大","70 比 68 小","99 再多 1 是 90","個位是 0 的數都比 50 大"],a:0,hint:"每一個都舉一個例子檢查看看。",exp:"(1) 十位 5 → 50～59；十位 4 → 40～49，一定比較大 ✓\n(2) 70 > 68 ✗\n(3) 99＋1 ＝ 100 ✗\n(4) 10、20、30 都比 50 小 ✗"},
+{id:"u1-15",u:"u1",lv:3,t:"c",q:"用 3、5、9 三張數字卡，任選兩張排成兩位數，一共可以排出幾個不同的兩位數？",o:["3 個","5 個","6 個","9 個"],a:2,hint:"有順序地寫出來，才不會漏掉。",exp:"35、39、53、59、93、95\n一共 6 個。（每一張都可以當十位，另外兩張當個位：3×2 ＝ 6）"},
+{id:"u1-16",u:"u1",lv:3,t:"c",q:"小朋友排成一排共 15 人。小安從前面數是第 6 個，小平從後面數是第 4 個。小安和小平中間有幾個人？",o:["4 人","5 人","6 人","7 人"],a:1,hint:"先算出小平從前面數是第幾個。",exp:"小平從後面數第 4 → 從前面數是 15 － 4 ＋ 1 ＝ 第 12 個。\n中間的人 ＝ 12 － 6 － 1 ＝ 5 人。"},
+{id:"u1-17",u:"u1",lv:2,t:"f",q:"一個兩位數，十位比個位多 3，個位是 4。這個兩位數是多少？",a:"74",hint:"先算十位是多少。",exp:"個位 4，十位 ＝ 4 ＋ 3 ＝ 7。\n所以這個數是 74。"},
+{id:"u1-18",u:"u1",lv:3,t:"c",q:"下面哪一種付法，剛好可以付出 65 元？",o:["1 個 50 元和 1 個 10 元","1 個 50 元、1 個 10 元和 1 個 5 元","6 個 10 元","1 個 50 元和 2 個 5 元"],a:1,hint:"一個一個加起來看看是不是 65。",exp:"(1) 50＋10 ＝ 60 ✗\n(2) 50＋10＋5 ＝ 65 ✓\n(3) 10×6 ＝ 60 ✗\n(4) 50＋10 ＝ 60 ✗"},
+{id:"u1-19",u:"u1",lv:3,t:"f",q:"用 5 元和 10 元硬幣付 40 元，兩種硬幣都一定要用到。一共有幾種付法？",a:"3",hint:"從用最多個 10 元開始，一個一個列出來。",exp:"10×3 ＋ 5×2 ＝ 40\n10×2 ＋ 5×4 ＝ 40\n10×1 ＋ 5×6 ＝ 40\n共 3 種。（全部用 10 元或全部用 5 元不算，因為兩種都要用到。）"},
+{id:"u1-20",u:"u1",lv:2,t:"c",q:"電影院一排有 12 個座位。小明坐在從左邊數第 5 個，他從右邊數是第幾個？",o:["7","8","9","6"],a:1,hint:"左邊數的位子 ＋ 右邊數的位子 － 1 ＝ 總數。",exp:"12 － 5 ＋ 1 ＝ 8，小明從右邊數是第 8 個。"},
+{id:"u1-21",u:"u1",lv:3,t:"c",q:"下面哪一個說法是<b>錯</b>的？",o:["1 個 50 元可以換 5 個 10 元","2 個 5 元和 1 個 10 元一樣多","100 元可以換 20 個 5 元","1 個 10 元可以換 5 個 1 元"],a:3,hint:"一個一個算算看。",exp:"(1) 10×5 ＝ 50 ✓\n(2) 5×2 ＝ 10 ✓\n(3) 5×20 ＝ 100 ✓\n(4) 1 個 10 元要換 <b>10</b> 個 1 元，不是 5 個 ✗"},
+
+/* ---- u2 加法和減法 ---- */
+{id:"u2-14",u:"u2",lv:2,t:"c",q:"小明有 56 張卡片，送給弟弟 18 張，又買了 25 張。現在有幾張？",o:["63 張","49 張","99 張","73 張"],a:0,hint:"照事情發生的順序：先減再加。",exp:"56 － 18 ＝ 38\n38 ＋ 25 ＝ 63 張。"},
+{id:"u2-15",u:"u2",lv:2,t:"c",q:"下面哪一個算式的答案<b>最大</b>？",o:["45 ＋ 27","90 － 25","38 ＋ 33","52 ＋ 19"],a:0,hint:"四個都算出來再比。",exp:"72、65、71、71 → 最大的是 45＋27 ＝ 72。"},
+{id:"u2-16",u:"u2",lv:3,t:"f",q:"□ － 26 = 15 ＋ 19，□ 是多少？",a:"60",hint:"先把右邊算成一個數。",exp:"右邊 15＋19 ＝ 34\n□ ＝ 34 ＋ 26 ＝ 60。驗算：60－26 ＝ 34 ✓"},
+{id:"u2-17",u:"u2",lv:3,t:"c",q:"甲站到乙站 28 公尺，乙站到丙站 35 公尺。從甲站走到丙站一共幾公尺？",o:["63 公尺","7 公尺","53 公尺","73 公尺"],a:0,hint:"兩段路接起來就是相加。",exp:"28 ＋ 35 ＝ 63 公尺。"},
+{id:"u2-18",u:"u2",lv:3,t:"f",q:"小美有 24 顆糖，小英有 38 顆。小英要給小美幾顆，兩個人才會一樣多？",a:"7",hint:"先算兩人差幾顆，再想想給出去之後差多少。",exp:"兩人相差 38 － 24 ＝ 14 顆。\n給出去 1 顆，差就少 2 顆，所以要給 14 ÷ 2 ＝ 7 顆。\n驗算：38－7 ＝ 31，24＋7 ＝ 31 ✓"},
+{id:"u2-19",u:"u2",lv:2,t:"f",q:"57 ＋ 26 － 30 = ?",a:"53",hint:"由左往右一步一步算。",exp:"57 ＋ 26 ＝ 83\n83 － 30 ＝ 53"},
+{id:"u2-20",u:"u2",lv:3,t:"c",q:"下面哪一個說法是<b>對</b>的？",o:["36 ＋ 18 和 18 ＋ 36 答案不一樣","62 － 25 和 25 － 62 答案一樣","45 ＋ 0 和 45 － 0 答案一樣","30 ＋ 30 比 70 － 10 大"],a:2,hint:"每一個都算算看。",exp:"(1) 加法可以交換，答案一樣 ✗\n(2) 減法不能交換 ✗\n(3) 45＋0 ＝ 45，45－0 ＝ 45，一樣 ✓\n(4) 30＋30 ＝ 60，70－10 ＝ 60，一樣大，不是比較大 ✗"},
+{id:"u2-21",u:"u2",lv:3,t:"f",q:"一個數先加 18，再減 25，最後得到 40。這個數原本是多少？",a:"47",hint:"倒著算：加變減、減變加，從最後一步先還原。",exp:"40 ＋ 25 ＝ 65\n65 － 18 ＝ 47\n驗算：47＋18 ＝ 65，65－25 ＝ 40 ✓"},
+
+/* ---- u3 比長短 ---- */
+{id:"u3-10",u:"u3",lv:2,t:"c",q:"用同一支迴紋針量三條繩子：甲 12 個、乙 9 個、丙 15 個。下面哪一個說法是<b>對</b>的？",o:["乙最長","丙比甲長 3 個迴紋針","甲比乙短","三條一樣長"],a:1,hint:"單位一樣，數字愈大愈長。",exp:"丙 15 > 甲 12 > 乙 9。\n(2) 15 － 12 ＝ 3 ✓\n(1) 最長是丙 ✗　(3) 甲比乙長 ✗　(4) 不一樣長 ✗"},
+{id:"u3-11",u:"u3",lv:3,t:"c",q:"小明用短短的橡皮擦量桌子，量出 20 個。小華用比較長的鉛筆量同一張桌子，量出來的數字會怎麼樣？",o:["比 20 大","比 20 小","剛好是 20","不一定"],a:1,hint:"單位變長了，需要的個數會變多還是變少？",exp:"桌子長度沒有變，可是量的「單位」變長了，\n所以需要的個數就會變少 → 比 20 小。\n（單位愈大，個數愈少。）"},
+{id:"u3-12",u:"u3",lv:3,t:"f",q:"一條緞帶長 18 個小方塊，剪成一樣長的 3 段，每一段是幾個小方塊長？",a:"6",hint:"平分成 3 份。",exp:"18 分成 3 份一樣多：6、6、6。\n每段 6 個小方塊長。"},
+{id:"u3-13",u:"u3",lv:1,t:"c",q:"下面哪一個東西的邊是<b>曲線</b>？",o:["課本","三角板","呼拉圈","直尺"],a:2,hint:"彎彎的、不會轉角的線叫曲線。",exp:"呼拉圈是圓圓彎彎的，是曲線。\n課本、三角板、直尺的邊都是直直的直線。"},
+{id:"u3-14",u:"u3",lv:3,t:"c",q:"甲比乙長，丙比甲長，丁比乙短。哪一條最長？",o:["甲","乙","丙","丁"],a:2,hint:"把四條由長到短排成一列。",exp:"丙 > 甲 > 乙 > 丁。\n最長的是丙，最短的是丁。"},
+{id:"u3-15",u:"u3",lv:3,t:"f",q:"A、B 兩條緞帶接起來共 20 個小方塊長，A 比 B 長 4 個。A 有幾個小方塊長？",a:"12",hint:"和差問題：(和＋差) ÷ 2。",exp:"(20 ＋ 4) ÷ 2 ＝ 24 ÷ 2 ＝ 12 → A 是 12 個。\nB ＝ 20 － 12 ＝ 8 個。驗算：12＋8 ＝ 20，12－8 ＝ 4 ✓"},
+{id:"u3-16",u:"u3",lv:2,t:"f",q:"一枝鉛筆長 8 個迴紋針。3 枝一樣的鉛筆接起來，一共是幾個迴紋針長？",a:"24",hint:"3 個 8 合起來。",exp:"8 ＋ 8 ＋ 8 ＝ 24 個迴紋針長。"},
+
+/* ---- u4 時間和日期 ---- */
+{id:"u4-12",u:"u4",lv:2,t:"c",q:"下面哪一個說法是<b>對</b>的？",o:["1 小時比 100 分鐘長","一個星期有 6 天","中午 12 點在早上 8 點的後面","一年有 10 個月"],a:2,hint:"一個一個檢查。",exp:"(1) 1 小時 ＝ 60 分，比 100 分短 ✗\n(2) 一星期 7 天 ✗\n(3) 早上 8 點 → 中午 12 點，12 點在後面 ✓\n(4) 一年 12 個月 ✗"},
+{id:"u4-13",u:"u4",lv:3,t:"c",q:"今天是 3 月 20 日星期五，3 月 6 日是星期幾？",o:["星期三","星期四","星期五","星期六"],a:2,hint:"20 － 6 ＝ 14，剛好是幾個星期？",exp:"20 － 6 ＝ 14 天 ＝ 剛好 2 個星期。\n每 7 天回到同一個星期幾，所以 3 月 6 日也是星期五。"},
+{id:"u4-14",u:"u4",lv:2,t:"c",q:"小華 6 點半起床，7 點半出門。他在家準備了多久？",o:["30 分鐘","1 小時","1 小時 30 分","2 小時"],a:1,hint:"從 6 點半到 7 點半。",exp:"6:30 → 7:30 剛好經過 1 小時。"},
+{id:"u4-15",u:"u4",lv:1,t:"f",q:"半小時是幾分鐘？",a:"30",hint:"1 小時的一半。",exp:"1 小時 ＝ 60 分，一半是 30 分。"},
+{id:"u4-16",u:"u4",lv:3,t:"c",q:"某個月的 3 日是星期二，這個月的 17 日是星期幾？",o:["星期一","星期二","星期三","星期四"],a:1,hint:"17 － 3 ＝ 14，是幾個星期？",exp:"17 － 3 ＝ 14 天 ＝ 2 個星期整。\n所以 17 日也是星期二。"},
+{id:"u4-17",u:"u4",lv:2,t:"c",q:"下面四件事，哪一件花的時間<b>最長</b>？",o:["眨一次眼","唱一首歌","上一節課","睡一個午覺"],a:3,hint:"想想每件事大概要幾秒、幾分、幾小時。",exp:"眨眼（不到 1 秒）< 唱一首歌（約 3～5 分）< 上一節課（40 分）< 睡午覺（約 1～2 小時）。\n最長的是睡午覺。"},
+{id:"u4-18",u:"u4",lv:3,t:"c",q:"這個月有 30 天，最後一天是星期日。這個月的 1 日是星期幾？",o:["星期五","星期六","星期日","星期一"],a:1,hint:"從 30 日往前推，每 7 天是同一個星期幾。",exp:"30 日星期日 → 往前 28 天（4 個星期）是 2 日，也是星期日。\n所以 1 日是星期六。"},
+
+/* ---- u5 圖形與空間 ---- */
+{id:"u5-12",u:"u5",lv:2,t:"c",q:"下面哪一個說法是<b>錯</b>的？",o:["正方形的四個邊一樣長","長方形有 4 個角","三角形有 3 個邊","圓形有 1 個角"],a:3,hint:"圓形有沒有轉角的地方？",exp:"圓形是一條曲線圍成的，<b>沒有角</b>，所以 (4) 是錯的。\n其他三個都對。"},
+{id:"u5-13",u:"u5",lv:2,t:"f",q:"用 6 個一樣的正方形磁磚排成一個長方形，排成 2 排。每一排有幾塊？",a:"3",hint:"6 分成 2 排一樣多。",exp:"6 分成 2 排，每排 3 塊（3＋3 ＝ 6）。"},
+{id:"u5-14",u:"u5",lv:3,t:"c",q:"2 個正方形和 3 個三角形，一共有幾個角？",o:["15 個","17 個","12 個","20 個"],a:1,hint:"正方形 4 個角、三角形 3 個角。",exp:"正方形：4 ＋ 4 ＝ 8 個角\n三角形：3 ＋ 3 ＋ 3 ＝ 9 個角\n8 ＋ 9 ＝ 17 個角。"},
+{id:"u5-15",u:"u5",lv:3,t:"f",q:"用小正方形拼成一個大長方形，長邊排 5 塊、短邊排 3 塊。一共要幾塊小正方形？",fig:"■ ■ ■ ■ ■\n■ ■ ■ ■ ■\n■ ■ ■ ■ ■",a:"15",hint:"一排一排數：3 排，每排 5 塊。",exp:"5 ＋ 5 ＋ 5 ＝ 15 塊。"},
+{id:"u5-16",u:"u5",lv:2,t:"c",q:"下面哪一種形狀的磁磚，<b>不能</b>鋪滿地板而不留空隙？",o:["正方形","長方形","三角形","圓形"],a:3,hint:"想想圓形和圓形靠在一起會怎樣。",exp:"圓形和圓形之間一定會留下彎彎的空隙，沒辦法鋪滿。\n正方形、長方形、三角形都可以邊碰邊緊密排列。"},
+{id:"u5-17",u:"u5",lv:2,t:"f",q:"一個長方體有 6 個面。2 個長方體一共有幾個面？",a:"12",hint:"6 加 6。",exp:"6 ＋ 6 ＝ 12 個面。"},
+{id:"u5-18",u:"u5",lv:3,t:"f",q:"下面是從上面往下看的圖，每一格的數字代表那一格疊了幾塊積木。一共有幾塊積木？",fig:"┌───┬───┐\n│ 2 │ 1 │\n├───┼───┤\n│ 3 │ 2 │\n└───┴───┘",a:"8",hint:"把每一格的數字加起來。",exp:"2 ＋ 1 ＋ 3 ＋ 2 ＝ 8 塊。\n（也可以一層一層數：第 1 層 4 塊、第 2 層 3 塊、第 3 層 1 塊 → 4＋3＋1 ＝ 8。）"},
+{id:"u5-19",u:"u5",lv:3,t:"c",q:"把兩個一樣的直角三角形併在一起，<b>不可能</b>排出下面哪一個圖形？",o:["長方形","比較大的三角形","平行四邊形","圓形"],a:3,hint:"直直的邊怎麼拼，都拼不出彎彎的線。",exp:"三角形的邊都是直線，拼起來還是由直線圍成的圖形，\n不可能變成圓形（圓形是曲線）。"},
+
+/* ---- u6 分類與統計 ---- */
+{id:"u6-9",u:"u6",lv:3,t:"c",q:"看下面的動物統計表，哪一個說法是<b>錯</b>的？",fig:"動物 │ 貓  狗  兔  鳥\n───┼────────────────\n數量 │  6   9   4   5",o:["狗最多","兔比鳥少 1 隻","貓和兔合起來比狗多 1 隻","全部一共有 25 隻"],a:3,hint:"最後一個要把四種都加起來。",exp:"(1) 9 最多 ✓\n(2) 5 － 4 ＝ 1 ✓\n(3) 6 ＋ 4 ＝ 10，10 － 9 ＝ 1 ✓\n(4) 6＋9＋4＋5 ＝ 24，不是 25 ✗"},
+{id:"u6-10",u:"u6",lv:2,t:"f",q:"看上面的動物統計表：貓和鳥合起來有幾隻？",fig:"動物 │ 貓  狗  兔  鳥\n───┼────────────────\n數量 │  6   9   4   5",a:"11",hint:"把兩種的數量加起來。",exp:"6 ＋ 5 ＝ 11 隻。"},
+{id:"u6-11",u:"u6",lv:3,t:"f",q:"全班 30 人，會游泳的有 18 人，其中男生 11 人。會游泳的女生有幾人？",a:"7",hint:"只看「會游泳」的那 18 人。",exp:"18 － 11 ＝ 7 人。\n（全班 30 人是多餘的資訊，不需要用到。）"},
+{id:"u6-12",u:"u6",lv:2,t:"c",q:"用正字記號記錄次數：「正 正 丁」代表幾次？",o:["10 次","12 次","13 次","15 次"],a:1,hint:"一個「正」是 5 畫，「丁」是 2 畫。",exp:"正 ＝ 5，正 ＝ 5，丁 ＝ 2\n5 ＋ 5 ＋ 2 ＝ 12 次。"},
+{id:"u6-13",u:"u6",lv:3,t:"c",q:"看借書統計表，四天一共借了 18 本。星期二借了幾本？",fig:"星期 │ 一  二  三  四\n───┼──────────────\n本數 │  4   ?   6   3",o:["4 本","5 本","6 本","7 本"],a:1,hint:"先把知道的三天加起來。",exp:"4 ＋ 6 ＋ 3 ＝ 13 本\n18 － 13 ＝ 5 本。"},
+{id:"u6-14",u:"u6",lv:1,t:"c",q:"下面哪一個<b>不屬於</b>「交通工具」這一類？",o:["腳踏車","公車","火車","書包"],a:3,hint:"哪一個不是用來載人、載東西移動的？",exp:"書包是文具用品，不是交通工具。"},
+
+/* ---- u7 卓越盃綜合挑戰 ---- */
+{id:"u7-13",u:"u7",lv:3,t:"c",q:"8 個小朋友圍成一圈。從一邊數，小明和小華中間隔了 3 個人。從另一邊數，中間隔了幾個人？",o:["2 人","3 人","4 人","5 人"],a:1,hint:"把小明和小華自己扣掉，剩下的人分成兩邊。",exp:"扣掉小明和小華：8 － 2 ＝ 6 人。\n一邊 3 人，另一邊 6 － 3 ＝ 3 人。"},
+{id:"u7-14",u:"u7",lv:3,t:"f",q:"一條 20 公尺的路，兩邊都要種樹，每隔 5 公尺種 1 棵，頭尾都要種。一共要種幾棵？",a:"10",hint:"先算一邊要種幾棵，再乘 2。",exp:"一邊：20 ÷ 5 ＝ 4 個間隔，棵數 ＝ 4 ＋ 1 ＝ 5 棵。\n兩邊：5 ＋ 5 ＝ 10 棵。"},
+{id:"u7-15",u:"u7",lv:3,t:"c",q:"用 1、2、3 三張數字卡排成三位數（每張都要用到），一共可以排出幾個不同的數？",o:["3 個","4 個","6 個","9 個"],a:2,hint:"有順序地寫：先寫 1 開頭的，再寫 2 開頭的…",exp:"123、132、213、231、312、321\n一共 6 個。"},
+{id:"u7-16",u:"u7",lv:3,t:"f",q:"盒子裡有紅球和藍球共 21 顆，紅球比藍球多 5 顆。藍球有幾顆？",a:"8",hint:"和差問題：小的 ＝ (和 － 差) ÷ 2。",exp:"(21 － 5) ÷ 2 ＝ 16 ÷ 2 ＝ 8 → 藍球 8 顆。\n紅球 ＝ 21 － 8 ＝ 13 顆。驗算：13－8 ＝ 5 ✓"},
+{id:"u7-17",u:"u7",lv:3,t:"c",q:"甲、乙、丙三人賽跑。甲不是第一名，丙是第三名。下面哪一個說法是對的？",o:["甲是第二名","乙是第二名","甲是第三名","無法確定"],a:0,hint:"先把丙的名次填上，剩下兩個名次給甲和乙。",exp:"丙是第三名 → 剩下第一、第二給甲和乙。\n甲不是第一 → 甲是第二，乙是第一。"},
+{id:"u7-18",u:"u7",lv:3,t:"f",q:"一個數加上 12 之後，再加上 12，結果是 40。這個數是多少？",a:"16",hint:"倒著算兩次，或先算一共加了多少。",exp:"一共加了 12 ＋ 12 ＝ 24\n40 － 24 ＝ 16。驗算：16＋12 ＝ 28，28＋12 ＝ 40 ✓"},
+{id:"u7-19",u:"u7",lv:3,t:"c",q:"一本書從第 8 頁看到第 20 頁，一共看了幾頁？",o:["12 頁","13 頁","14 頁","28 頁"],a:1,hint:"第 8 頁自己也要算進去（和排隊問題一樣）。",exp:"20 － 8 ＝ 12，但第 8 頁也看了，要再加 1。\n12 ＋ 1 ＝ 13 頁。"},
+{id:"u7-20",u:"u7",lv:3,t:"f",q:"時鐘敲 3 下要 4 秒（每兩下之間的時間一樣）。敲 6 下要幾秒？",a:"10",hint:"敲 3 下中間有幾個「空檔」？",exp:"敲 3 下中間有 3 － 1 ＝ 2 個空檔，2 個空檔 ＝ 4 秒 → 1 個空檔 ＝ 2 秒。\n敲 6 下有 6 － 1 ＝ 5 個空檔 → 5 × 2 ＝ 10 秒。"},
+{id:"u7-21",u:"u7",lv:3,t:"c",q:"一張紙對摺 1 次會有 2 層，對摺 2 次會有 4 層。對摺 3 次會有幾層？",o:["6 層","8 層","9 層","12 層"],a:1,hint:"每摺一次，層數會變成幾倍？",exp:"每對摺一次，層數就變成 2 倍：\n2 → 4 → 8\n對摺 3 次是 8 層。"},
+{id:"u7-22",u:"u7",lv:3,t:"f",q:"小明買了 3 枝一樣的筆和 1 個橡皮擦，共付 47 元。橡皮擦 8 元，1 枝筆多少元？",a:"13",hint:"先把橡皮擦的錢扣掉，剩下的是 3 枝筆的錢。",exp:"47 － 8 ＝ 39（3 枝筆的錢）\n39 分成 3 份一樣多 → 13、13、13\n1 枝筆 13 元。"}
+);
+
+/* =========================================================================
    核心程式（一般使用不需要改這裡）
    ========================================================================= */
 const $  = function(s,r){ return (r||document).querySelector(s); };
@@ -720,17 +929,22 @@ function zyRead(ch, prev, next){
 }
 function zy(text){
   const t = String(text==null?"":text);
-  if(!S.zhuyin) return esc(t).replace(/\n/g,"<br>");
-  const arr = Array.from(t);
+  const segs = t.split(/(<\/?b>)/);
   let out="";
-  for(let i=0;i<arr.length;i++){
-    const ch=arr[i];
-    if(ch==="\n"){ out+="<br>"; continue; }
-    const z = zyRead(ch, arr[i-1]||"", arr[i+1]||"");
-    out += z ? zySpan(ch,z) : esc(ch);
+  for(const seg of segs){
+    if(seg==="<b>"||seg==="</b>"){ out+=seg; continue; }
+    if(!S.zhuyin){ out += esc(seg).replace(/\n/g,"<br>"); continue; }
+    const arr = Array.from(seg);
+    for(let i=0;i<arr.length;i++){
+      const ch=arr[i];
+      if(ch==="\n"){ out+="<br>"; continue; }
+      const z = zyRead(ch, arr[i-1]||"", arr[i+1]||"");
+      out += z ? zySpan(ch,z) : esc(ch);
+    }
   }
-  return '<span class="zyline">'+out+'</span>';
+  return S.zhuyin ? '<span class="zyline">'+out+'</span>' : out;
 }
+function plain(t){ return String(t==null?"":t).replace(/<\/?b>/g,""); }
 /* ---------- 朗讀 ---------- */
 let voiceTW = null;
 function pickVoice(){
@@ -785,6 +999,7 @@ function addStar(n){ S.stars+=n; $("#hudStar").textContent=S.stars; saveState();
 /* ---------- 導覽 ---------- */
 const ROUTES=[
   {id:"map",label:"🗺️ 關卡地圖"},
+  {id:"supp",label:"📚 教材補充"},
   {id:"past",label:"📄 歷屆試題"},
   {id:"exam",label:"⏱️ 模擬考"},
   {id:"tools",label:"🧰 教具箱"},
@@ -793,15 +1008,16 @@ const ROUTES=[
   {id:"guide",label:"⚙️ 老師專區"}
 ];
 let route="map";
+let suppOpen=null, lessonOpen=0;
 function renderNav(){
   $("#nav").innerHTML = ROUTES.map(function(r){
     return '<button class="'+(route===r.id?"on":"")+'" onclick="go(\''+r.id+'\')">'+r.label+'</button>';
   }).join("");
 }
-function go(r){ stopTimer(); SESS=null; route=r; renderNav(); render(); window.scrollTo(0,0); }
+function go(r, keep){ stopTimer(); SESS=null; if(!keep && 1) suppOpen=null; route=r; renderNav(); render(); window.scrollTo(0,0); }
 window.go=go;
 function render(){
-  ({map:renderMap, past:renderPast, exam:renderExam, tools:renderTools,
+  ({map:renderMap, supp:renderSupp, past:renderPast, exam:renderExam, tools:renderTools,
     wrong:renderWrong, record:renderRecord, guide:renderGuide}[route]||renderMap)();
 }
 
@@ -811,17 +1027,18 @@ function unitProgress(uid){
   return {total:total, done:done, right:st.right||0, pct: total?Math.round(done/total*100):0};
 }
 function renderMap(){
+  const MU=UNITS.filter(function(u){return !u.supp;});
   const totalDone=UNITS.reduce(function(s,u){return s+unitProgress(u.id).done;},0);
   app.innerHTML=
   '<h2 class="title">🗺️ 今天要闖哪一關？</h2>'+
-  '<p class="sub">共 '+UNITS.length+' 個單元 · '+BANK.length+' 題自編題 · '+PAST.length+' 題歷屆／模擬試題。點一個單元開始！</p>'+
+  '<p class="sub">共 '+MU.length+' 個單元 · '+BANK.length+' 題自編題 · '+PAST.length+' 題歷屆／模擬試題。點一個單元開始！</p>'+
   '<div class="grid statgrid" style="margin-bottom:22px">'+
     '<div class="stat"><b>'+S.stars+'</b><span>⭐ 累積星星</span></div>'+
     '<div class="stat"><b>'+totalDone+'</b><span>已完成題數</span></div>'+
     '<div class="stat"><b>'+Object.keys(S.wrong).length+'</b><span>錯題本題數</span></div>'+
     '<div class="stat"><b>'+S.log.length+'</b><span>練習場次</span></div>'+
   '</div>'+
-  '<div class="grid unit-grid">'+UNITS.map(function(u){
+  '<div class="grid unit-grid">'+MU.map(function(u){
     const p=unitProgress(u.id);
     const badge=p.pct>=100?'<div class="badge">🏆</div>':(p.pct>0?'<div class="badge">🔥</div>':'');
     return '<button class="unit" onclick="startUnit(\''+u.id+'\')">'+badge+
@@ -1172,7 +1389,7 @@ function judge(ok,q){
 }
 function nextQ(){ SESS.i++; renderQ(); window.scrollTo(0,0); }
 window.nextQ=nextQ;
-function quitSession(){ stopTimer(); SESS=null; go(route); }
+function quitSession(){ stopTimer(); SESS=null; go(route, true); }
 window.quitSession=quitSession;
 
 /* ---- 判定（考試模式用） ---- */
@@ -1660,7 +1877,7 @@ function renderGuide(){
   const keyRows=choiceQs.map(function(q){
     const k=ansOf(q);
     return '<tr'+(ansOf(q)==null?' style="background:#FFFBEB"':'')+'><td><b>'+esc(paperOf(q.p).name)+'<br>第 '+q.no+' 題</b><br><span style="color:var(--ink2);font-size:14px">'+esc(q.tag)+'</span></td>'+
-      '<td style="max-width:420px">'+esc(q.q)+'</td>'+
+      '<td style="max-width:420px">'+esc(plain(q.q))+'</td>'+
       '<td>'+[0,1,2,3].map(function(i){
         return '<button class="btn '+(k===i?"green":"ghost")+' sm" style="margin:2px" onclick="setKey(\''+q.id+'\','+i+')">('+(i+1)+')</button>';
       }).join("")+'</td></tr>';
@@ -1716,6 +1933,221 @@ function resetAll(){
   S=baseState(); saveState(); location.reload();
 }
 window.exportData=exportData; window.importData=importData; window.resetAll=resetAll;
+
+
+/* =============================== 教材補充 =============================== */
+function suppOf(id){ return SUPP.find(function(s){return s.id===id;}); }
+function renderSupp(){
+  if(suppOpen) return renderSuppTopic(suppOpen);
+  app.innerHTML=
+  '<h2 class="title">📚 小二教材補充</h2>'+
+  '<p class="sub">課本以外、卓越盃常考、但孩子最容易卡住的觀念。每個主題都有「教學內容 → 互動教具 → 練習題」三段。</p>'+
+  '<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">'+
+  SUPP.map(function(s){
+    if(s.soon){
+      return '<div class="card" style="opacity:.62;border-style:dashed"><div style="font-size:40px">'+s.emoji+'</div>'+
+        '<div style="font-size:22px;font-weight:900;margin:6px 0 2px">'+esc(s.name)+'</div>'+
+        '<div class="sub" style="margin:0">'+esc(s.sub)+'</div>'+
+        '<p class="sub" style="margin-top:10px;font-size:15px">跟我說你想加什麼主題（例如「幾個幾」「平分與分裝」「週期規律」），我就把教學內容和題目補進來。</p></div>';
+    }
+    const p=unitProgress(s.id);
+    return '<button class="unit" onclick="openSupp(\''+s.id+'\')">'+
+      (p.pct>=100?'<div class="badge">🏆</div>':(p.pct>0?'<div class="badge">🔥</div>':''))+
+      '<div class="emoji">'+s.emoji+'</div>'+
+      '<div class="uname">'+esc(s.name)+'</div>'+
+      '<div class="udesc">'+esc(s.sub)+'</div>'+
+      '<div class="bar"><i style="width:'+p.pct+'%;background:var(--'+s.color+')"></i></div>'+
+      '<div class="meta"><span>'+s.lessons.length+' 個教學段 · '+p.total+' 題</span><span>'+p.pct+'%</span></div></button>';
+  }).join("")+'</div>';
+}
+function openSupp(id){ suppOpen=id; renderSupp(); window.scrollTo(0,0); }
+function closeSupp(){ suppOpen=null; renderSupp(); window.scrollTo(0,0); }
+window.openSupp=openSupp; window.closeSupp=closeSupp;
+
+function renderSuppTopic(id){
+  const s=suppOf(id), p=unitProgress(id);
+  app.innerHTML=
+  '<div class="qtop"><button class="btn ghost sm" onclick="closeSupp()">← 回主題列表</button>'+
+    '<span class="pill">'+s.emoji+' '+esc(s.name)+'</span>'+
+    '<span class="pill">'+esc(s.sub)+'</span>'+
+    '<div class="progressbar"><i style="width:'+p.pct+'%"></i></div></div>'+
+  '<div class="card" style="border-color:var(--'+s.color+');background:linear-gradient(180deg,#fff,var(--'+s.color+'-l))">'+
+    '<b style="font-size:20px">🎯 這個主題要學會什麼</b>'+
+    '<p style="font-size:21px;margin:8px 0 0;line-height:1.9">'+zy(s.goal)+' '+speakBtn(s.goal)+'</p></div>'+
+  '<h3 style="font-size:23px;font-weight:900;margin:22px 0 10px">📖 教學內容（點標題展開）</h3>'+
+  s.lessons.map(function(L,i){
+    const on = i===lessonOpen;
+    return '<div class="lesson'+(on?' on':'')+'">'+
+      '<button class="lhead" onclick="openLesson('+i+')"><span>'+zy(L.t)+'</span><span class="lmark">'+(on?'▾':'▸')+'</span></button>'+
+      (on?'<div class="lbody">'+
+        L.p.map(function(x){ return '<p class="lp">'+zy(x)+' '+speakBtn(plain(x))+'</p>'; }).join("")+
+        (L.eg?'<div class="leg">'+L.eg.map(function(x){return '<div>'+zy(x)+'</div>';}).join("")+'</div>':'')+
+        (L.tip?'<div class="ltip">💡 '+zy(L.tip)+'</div>':'')+
+      '</div>':'')+
+    '</div>';
+  }).join("")+
+  '<h3 style="font-size:23px;font-weight:900;margin:24px 0 10px">🧰 動手玩玩看</h3>'+
+  '<div class="card toolwrap" id="toolwrap"></div>'+
+  '<div class="card" style="margin-top:22px;text-align:center">'+
+    '<b style="font-size:21px">✏️ 換孩子練習</b>'+
+    '<p class="sub" style="margin:6px 0 12px">這個主題有 '+p.total+' 題，已完成 '+p.done+' 題。</p>'+
+    '<button class="btn '+s.color.replace("teal","green")+'" onclick="startUnit(\''+id+'\')">▶ 開始練習</button> '+
+    '<button class="btn ghost" onclick="startSuppHard(\''+id+'\')">只練挑戰題 ⭐⭐⭐</button></div>';
+  if(s.tool==="size") tSizeGame(); else if(s.tool==="two") tTwoStep();
+}
+function openLesson(i){ lessonOpen = (lessonOpen===i? -1 : i); renderSuppTopic(suppOpen); }
+window.openLesson=openLesson;
+function startSuppHard(id){
+  const qs=BANK.filter(function(q){return q.u===id && q.lv===3;});
+  if(!qs.length){ alert("這個主題還沒有挑戰題。"); return; }
+  beginSession(shuffle(qs), unitOf(id).emoji+" "+unitOf(id).name+"・挑戰題", {mode:"practice"});
+}
+window.startSuppHard=startSuppHard;
+
+/* =============================== 教具：比大小練習機 =============================== */
+let sg={mode:"num", a:0, b:0, ea:"", eb:"", ans:"", pick:"", right:0, total:0};
+function sgNew(){
+  sg.pick=""; sg.total++;
+  if(sg.mode==="num"){
+    sg.a=2+Math.floor(Math.random()*97); sg.b=2+Math.floor(Math.random()*97);
+    if(Math.random()<.25) sg.b=sg.a;
+    if(Math.random()<.3){ sg.b = sg.a + (Math.random()<.5?1:-1)*(1+Math.floor(Math.random()*3)); }
+    sg.ea=String(sg.a); sg.eb=String(sg.b);
+    sg.ans = sg.a>sg.b?">":sg.a<sg.b?"<":"=";
+  }else{
+    const mk=function(){
+      const t=Math.random()<.5;
+      const x=10+Math.floor(Math.random()*70), y=1+Math.floor(Math.random()*20);
+      return t? {s:x+" ＋ "+y, v:x+y} : {s:x+" － "+y, v:x-y};
+    };
+    let L=mk(), R=mk();
+    if(Math.random()<.2){ R={s:L.v+" ＋ 0", v:L.v}; }
+    sg.ea=L.s; sg.eb=R.s; sg.a=L.v; sg.b=R.v;
+    sg.ans = L.v>R.v?">":L.v<R.v?"<":"=";
+  }
+  drawSG();
+}
+function sgPick(sym){
+  if(sg.pick) return;
+  sg.pick=sym; if(sym===sg.ans){ sg.right++; confetti(); }
+  drawSG();
+}
+function sgMode(m){ sg.mode=m; sg.right=0; sg.total=0; sgNew(); }
+window.sgNew=sgNew; window.sgPick=sgPick; window.sgMode=sgMode;
+function drawSG(){
+  const box=$("#toolwrap"); if(!box) return;
+  const ok = sg.pick && sg.pick===sg.ans;
+  const shown = sg.pick ? sg.ans : "○";
+  box.innerHTML=
+  '<div class="ctrls"><label>題型：</label>'+
+    '<button class="btn '+(sg.mode==="num"?"blue":"ghost")+' sm" onclick="sgMode(\'num\')">兩個數比大小</button>'+
+    '<button class="btn '+(sg.mode==="exp"?"blue":"ghost")+' sm" onclick="sgMode(\'exp\')">兩個算式比大小</button>'+
+    '<span class="pill">答對 '+sg.right+' / '+sg.total+'</span>'+
+    '<button class="btn ghost sm" onclick="sgNew()">🎲 換一題</button></div>'+
+  '<div style="display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;margin:18px 0 6px">'+
+    '<span style="font-size:44px;font-weight:900">'+esc(sg.ea)+'</span>'+
+    '<span style="font-size:54px;font-weight:900;min-width:70px;text-align:center;color:'+(sg.pick?(ok?"var(--green)":"var(--red)"):"var(--ink2)")+'">'+shown+'</span>'+
+    '<span style="font-size:44px;font-weight:900">'+esc(sg.eb)+'</span>'+
+  '</div>'+
+  (sg.mode==="exp"?'<p style="text-align:center;font-size:22px;color:var(--ink2);font-weight:800">'+
+     (sg.pick?('（'+sg.a+' '+sg.ans+' '+sg.b+'）'):'先各自算出答案，再比大小')+'</p>':'')+
+  '<div style="display:flex;gap:14px;justify-content:center;margin-top:14px;flex-wrap:wrap">'+
+    [">","=","<"].map(function(s){
+      let cls="btn ghost";
+      if(sg.pick){ if(s===sg.ans) cls="btn green"; else if(s===sg.pick) cls="btn red"; }
+      return '<button class="'+cls+'" style="font-size:34px;padding:10px 34px" onclick="sgPick(\''+s+'\')">'+s+'</button>';
+    }).join("")+'</div>'+
+  (sg.pick?'<p style="text-align:center;font-size:24px;font-weight:900;margin-top:14px;color:'+(ok?"var(--green)":"var(--red)")+'">'+
+     (ok?"🎉 答對了！":"再看一次：大嘴巴要吃大數")+'　<button class="btn blue sm" onclick="sgNew()">下一題 →</button></p>':
+     '<p style="text-align:center;color:var(--ink2);margin-top:12px">口訣：<b>大嘴巴要吃大數</b>，開口對著比較大的那一邊。</p>');
+}
+function tSizeGame(){ if(!sg.total) sgNew(); else drawSG(); }
+
+/* =============================== 教具：兩步驟流程圖 =============================== */
+let tw={s:25, o1:"+", n1:18, o2:"-", n2:12, step:0, mode:"forward"};
+function twCalc(){
+  const mid = tw.o1==="+" ? tw.s+tw.n1 : tw.s-tw.n1;
+  const end = tw.o2==="+" ? mid+tw.n2 : mid-tw.n2;
+  return {mid:mid, end:end};
+}
+function twNew(){
+  tw.s = 20+Math.floor(Math.random()*50);
+  tw.o1 = Math.random()<.5?"+":"-";
+  tw.n1 = 5+Math.floor(Math.random()*25);
+  if(tw.o1==="-" && tw.n1>tw.s) tw.n1 = Math.max(1,tw.s-5);
+  tw.o2 = Math.random()<.5?"+":"-";
+  tw.n2 = 5+Math.floor(Math.random()*25);
+  let c=twCalc();
+  if(c.mid<0 || c.end<0){ tw.o2="+"; c=twCalc(); }
+  tw.step=0; drawTW();
+}
+function twStep(d){ tw.step=Math.max(0,Math.min(2,tw.step+d)); drawTW(); }
+function twMode(m){ tw.mode=m; tw.step=0; drawTW(); }
+function twSet(k,v){ tw[k]= (k==="o1"||k==="o2")? v : (parseInt(v)||0); tw.step=0; drawTW(); }
+window.twNew=twNew; window.twStep=twStep; window.twMode=twMode; window.twSet=twSet;
+function drawTW(){
+  const box=$("#toolwrap"); if(!box) return;
+  const c=twCalc();
+  const fwd = tw.mode==="forward";
+  const cell=function(v,show,color){
+    return '<div style="min-width:96px;text-align:center;background:'+(show?"var(--"+color+"-l)":"#F3F0EA")+
+      ';border:3px solid '+(show?"var(--"+color+")":"var(--line)")+';border-radius:16px;padding:12px 10px">'+
+      '<div style="font-size:34px;font-weight:900;color:'+(show?"var(--"+color+")":"#C7C1B7")+'">'+(show?v:"？")+'</div></div>';
+  };
+  const arrow=function(op,n,active){
+    return '<div style="text-align:center;min-width:92px">'+
+      '<div style="font-size:24px;font-weight:900;color:'+(active?"var(--orange)":"var(--ink2)")+'">'+(op==="+"?"＋":"－")+' '+n+'</div>'+
+      '<div style="font-size:26px;color:'+(active?"var(--orange)":"var(--line)")+'">'+(fwd?"⟶":"⟵")+'</div></div>';
+  };
+  const showMid = fwd ? tw.step>=1 : tw.step>=2;
+  const showEnd = fwd ? tw.step>=2 : true;
+  const showStart = fwd ? true : tw.step>=2;
+  box.innerHTML=
+  '<div class="ctrls">'+
+    '<button class="btn '+(fwd?"green":"ghost")+' sm" onclick="twMode(\'forward\')">正著算</button>'+
+    '<button class="btn '+(!fwd?"purple":"ghost")+' sm" onclick="twMode(\'back\')">倒著算（逆推）</button>'+
+    '<button class="btn ghost sm" onclick="twNew()">🎲 隨機出題</button></div>'+
+  '<div class="ctrls" style="margin-bottom:16px">'+
+    '<label>起點</label><input type="number" value="'+tw.s+'" onchange="twSet(\'s\',this.value)">'+
+    '<select onchange="twSet(\'o1\',this.value)"><option value="+"'+(tw.o1==="+"?" selected":"")+'>＋</option><option value="-"'+(tw.o1==="-"?" selected":"")+'>－</option></select>'+
+    '<input type="number" value="'+tw.n1+'" onchange="twSet(\'n1\',this.value)">'+
+    '<select onchange="twSet(\'o2\',this.value)"><option value="+"'+(tw.o2==="+"?" selected":"")+'>＋</option><option value="-"'+(tw.o2==="-"?" selected":"")+'>－</option></select>'+
+    '<input type="number" value="'+tw.n2+'" onchange="twSet(\'n2\',this.value)">'+
+  '</div>'+
+  '<div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap">'+
+    '<div><div style="text-align:center;font-size:15px;color:var(--ink2);font-weight:800;margin-bottom:4px">原本</div>'+cell(tw.s,showStart,"blue")+'</div>'+
+    arrow(tw.o1,tw.n1, fwd? tw.step>=1 : tw.step>=2)+
+    '<div><div style="text-align:center;font-size:15px;color:var(--ink2);font-weight:800;margin-bottom:4px">中間</div>'+cell(c.mid,showMid,"orange")+'</div>'+
+    arrow(tw.o2,tw.n2, fwd? tw.step>=2 : tw.step>=1)+
+    '<div><div style="text-align:center;font-size:15px;color:var(--ink2);font-weight:800;margin-bottom:4px">結果</div>'+cell(c.end,showEnd,"green")+'</div>'+
+  '</div>'+
+  '<div style="margin-top:18px;background:#FCFBF8;border:3px dashed var(--line);border-radius:16px;padding:14px 18px;font-size:22px;line-height:2;min-height:64px">'+
+    (fwd?
+      (tw.step===0?zy("先看清楚：原本是 "+tw.s+"，發生了兩次變化。按「下一步」一步一步算。"):
+       tw.step===1?zy("第一步："+tw.s+(tw.o1==="+"?" ＋ ":" － ")+tw.n1+" ＝ "+c.mid+"（先把中間的數算出來、寫下來）"):
+       zy("第二步："+c.mid+(tw.o2==="+"?" ＋ ":" － ")+tw.n2+" ＝ "+c.end+"　→　答案是 "+c.end))
+    :
+      (tw.step===0?zy("倒著算：只知道結果是 "+c.end+"，要找出原本是多少。口訣：加變減、減變加，從最後一步先還原。"):
+       tw.step===1?zy("還原最後一步："+c.end+(tw.o2==="+"?" － ":" ＋ ")+tw.n2+" ＝ "+c.mid+"（中間的數）"):
+       zy("再還原第一步："+c.mid+(tw.o1==="+"?" － ":" ＋ ")+tw.n1+" ＝ "+tw.s+"　→　原本是 "+tw.s))
+    )+
+  '</div>'+
+  '<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">'+
+    (tw.step>0?'<button class="btn ghost" onclick="twStep(-1)">← 上一步</button>':'')+
+    (tw.step<2?'<button class="btn '+(fwd?"green":"purple")+'" onclick="twStep(1)">下一步 →</button>':
+      '<span class="pill" style="border-color:var(--green);color:var(--green);font-size:19px">算完了！再按「隨機出題」換一題 🎲</span>')+
+  '</div>';
+}
+function tTwoStep(){ drawTW(); }
+
+/* 把兩個教具也放進教具箱 */
+TOOLS.push({id:"size",n:"比大小練習機",e:"⚖️"},{id:"two",n:"兩步驟流程圖",e:"🔗"});
+const _drawTool = drawTool;
+drawTool = function(){
+  if(curTool==="size") return tSizeGame();
+  if(curTool==="two") return tTwoStep();
+  return _drawTool();
+};
 
 /* =============================== 啟動 =============================== */
 $("#btnZhuyin").onclick=function(){ S.zhuyin=!S.zhuyin; saveState(); syncToggles(); if(SESS) renderQ(); else render(); };
