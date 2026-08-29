@@ -2604,9 +2604,9 @@ const TOOLS=[
   {id:"line",n:"數線跳格",e:"📶"},
   {id:"coin",n:"錢幣湊錢",e:"💰"},
   {id:"queue",n:"排隊序數",e:"🧍"},
-  {id:"clock",n:"整點半點鐘",e:"🕐"},
+  {id:"clock",n:"時鐘（幾時幾分）",e:"🕐"},
   {id:"cal",n:"月曆小幫手",e:"📅"},
-  {id:"ruler",n:"個別單位量長度",e:"📏"},
+  {id:"ruler",n:"比長短（個別單位）",e:"📏"},
   {id:"tile",n:"圖形鋪設",e:"🔷"},
   {id:"blocks",n:"積木堆疊",e:"🧱"},
   {id:"chart",n:"分類統計表",e:"📊"}
@@ -3974,6 +3974,277 @@ drawTool = function(){
   if(curTool==="space") return tSpace();
   return _drawTool3();
 };
+
+/* =========================================================================
+   修正與升級：注音、比長短、時鐘、月曆
+   ========================================================================= */
+
+/* ---- 1. 注音：數(ㄕㄨˇ)、個(ㄍㄜ˙) ---- */
+ZY_FIX["個"]="ㄍㄜ˙";
+ZY["個"]="ㄍㄜ˙";
+Object.assign(ZY_WORD, {
+  "個位":["ㄍㄜˋ","ㄨㄟˋ"], "個人":["ㄍㄜˋ","ㄖㄣˊ"], "個別":["ㄍㄜˋ","ㄅㄧㄝˊ"],
+  "個性":["ㄍㄜˋ","ㄒㄧㄥˋ"], "個數":["ㄍㄜˋ","ㄕㄨˋ"],
+  "數個":["ㄕㄨˇ","ㄍㄜ˙"], "數幾個":["ㄕㄨˇ","ㄐㄧˇ","ㄍㄜ˙"], "一個數":["ㄧˊ","ㄍㄜ˙","ㄕㄨˇ"],
+  "數星期":["ㄕㄨˇ","ㄒㄧㄥ","ㄑㄧˊ"], "數看看":["ㄕㄨˇ","ㄎㄢˋ","ㄎㄢˋ"],
+  "數過":["ㄕㄨˇ","ㄍㄨㄛˋ"], "數不":["ㄕㄨˇ","ㄅㄨˊ"], "數數兒":["ㄕㄨˇ","ㄕㄨˋ","ㄦ˙"],
+  "來數數":["ㄌㄞˊ","ㄕㄨˇ","ㄕㄨˇ"]
+});
+
+/* ---- 2. 比長短教具：可以用不同的單位，示範「不能比較」 ---- */
+const RU_UNITS=[{k:"📎",n:"迴紋針",w:26},{k:"🧊",n:"小方塊",w:34},{k:"🦶",n:"腳掌",w:46},
+                {k:"✏️",n:"鉛筆",w:40},{k:"🔘",n:"鈕扣",w:22}];
+ru.ua="📎"; ru.ub="📎";
+function ruU2(side,k){ ru[side]=k; tRuler(); }
+function ruSame(){ ru.ub=ru.ua; tRuler(); }
+window.ruU2=ruU2; window.ruSame=ruSame;
+function ruInfo(k){ return RU_UNITS.find(function(u){return u.k===k;}) || RU_UNITS[0]; }
+function tRuler(){
+  const box=$("#toolwrap"); if(!box) return;
+  const UA=ruInfo(ru.ua), UB=ruInfo(ru.ub), same = ru.ua===ru.ub;
+  const bar=function(n,U,color){
+    return '<div style="display:flex;align-items:center;gap:2px;flex-wrap:wrap">'+
+      Array(n+1).join('<span style="display:inline-block;width:'+U.w+'px;height:30px;background:'+color+
+        ';border:2px solid #fff;border-radius:6px;text-align:center;font-size:18px;line-height:30px">'+U.k+'</span>')+
+      '</div>';
+  };
+  const picker=function(side,cur){
+    return RU_UNITS.map(function(u){
+      return '<button class="btn '+(cur===u.k?"teal":"ghost")+' sm" style="font-size:18px" onclick="ruU2(\''+side+'\',\''+u.k+'\')">'+u.k+' '+u.n+'</button>';
+    }).join(" ");
+  };
+  box.innerHTML=
+  '<p class="sub">兩條繩子可以選<b>不同的單位</b>來量，試試看會發生什麼事。</p>'+
+  '<div class="ctrls"><label style="min-width:74px">甲 用</label>'+picker("ua",ru.ua)+
+    '<button class="btn ghost sm" onclick="ruA(-1)">－</button><span class="pill">'+ru.a+' 個</span><button class="btn ghost sm" onclick="ruA(1)">＋</button></div>'+
+  '<div style="margin:6px 0 16px">'+bar(ru.a,UA,"var(--blue)")+'</div>'+
+  '<div class="ctrls"><label style="min-width:74px">乙 用</label>'+picker("ub",ru.ub)+
+    '<button class="btn ghost sm" onclick="ruB(-1)">－</button><span class="pill">'+ru.b+' 個</span><button class="btn ghost sm" onclick="ruB(1)">＋</button></div>'+
+  '<div style="margin:6px 0 10px">'+bar(ru.b,UB,"var(--pink)")+'</div>'+
+  (same
+   ? '<div class="grid statgrid" style="margin-top:14px">'+
+       '<div class="stat"><b>'+(ru.a>ru.b?"甲":ru.a<ru.b?"乙":"一樣")+'</b><span>誰比較長</span></div>'+
+       '<div class="stat"><b>'+Math.abs(ru.a-ru.b)+'</b><span>相差幾個'+UA.n+'</span></div>'+
+       '<div class="stat"><b>'+(ru.a+ru.b)+'</b><span>接起來共幾個</span></div></div>'+
+     '<p class="sub" style="margin-top:12px">'+zy("兩條都用「"+UA.n+"」量，單位一樣，所以可以直接比：個數多的比較長。")+'</p>'
+   : '<div style="margin-top:14px;background:var(--red-l);border:3px solid var(--red);border-radius:18px;padding:16px 18px">'+
+       '<div style="font-size:26px;font-weight:900;color:#B91C1C">🚫 '+zy("單位不一樣，不能比較！")+'</div>'+
+       '<p style="font-size:20px;line-height:1.95;margin:8px 0 0">'+
+         zy("甲用「"+UA.n+"」量了 "+ru.a+" 個，乙用「"+UB.n+"」量了 "+ru.b+" 個。")+'<br>'+
+         zy("因為 1 個"+UA.n+"和 1 個"+UB.n+"本來就不一樣長，"+
+            "就算 "+ru.b+" 比 "+ru.a+" 大，也不能說乙比較長。")+'</p>'+
+       '<div style="margin-top:12px"><button class="btn red" onclick="ruSame()">👉 把乙也換成「'+UA.n+'」再量一次</button></div>'+
+     '</div>');
+}
+
+/* ---- 3. 時鐘教具：可以用手拖指針、也可以快速旋轉 ---- */
+function ckTotal(){ return (ck2.h%12)*60 + ck2.m; }
+function ckSetTotal(t){
+  t=((Math.round(t)%720)+720)%720;
+  const h=Math.floor(t/60); ck2.h = h===0?12:h; ck2.m = t%60;
+}
+let ckSpin=null;
+function ckFast(dir){
+  if(ckSpin){ clearInterval(ckSpin); ckSpin=null; ckPaint(); return; }
+  ckSpin=setInterval(function(){ ckSetTotal(ckTotal()+dir*4); ckPaint(); }, 45);
+  ckPaint();
+}
+function ckStop(){ if(ckSpin){ clearInterval(ckSpin); ckSpin=null; } }
+window.ckFast=ckFast; window.ckStop=ckStop;
+function ckPaint(){
+  const h=$("#hH"), m=$("#hM"), lab=$("#ckLabel"), hint=$("#ckHint");
+  if(!h||!m) return drawCK();
+  const ha=((ck2.h%12)*30+ck2.m*0.5)*Math.PI/180, ma=(ck2.m*6)*Math.PI/180;
+  h.setAttribute("x2",110+46*Math.sin(ha)); h.setAttribute("y2",110-46*Math.cos(ha));
+  m.setAttribute("x2",110+78*Math.sin(ma)); m.setAttribute("y2",110-78*Math.cos(ma));
+  if(lab) lab.textContent = ck2.h+" 時 "+ck2.m+" 分";
+  if(hint) hint.innerHTML = ckHintHTML();
+  const b=$("#ckSpinBtn"); if(b){ b.className="btn "+(ckSpin?"red":"ghost")+" sm"; b.textContent = ckSpin?"⏸ 停止":"⏩ 快速旋轉"; }
+}
+function ckHintHTML(){
+  const g=ck2.m/5;
+  return zy("🟠 短針看「時」：指在 "+ck2.h+" 和 "+(ck2.h%12+1)+" 中間 → "+ck2.h+" 時。")+"<br>"+
+         zy("🔵 長針看「分」：一大格 5 分"+(Number.isInteger(g)? "，指到第 "+g+" 大格 → 5 × "+g+" ＝ "+ck2.m+" 分" : "，現在是 "+ck2.m+" 分"));
+}
+function ckBind(){
+  const el=$("#ckMain"); if(!el) return;
+  let drag=false;
+  const angle=function(e){
+    const r=el.getBoundingClientRect();
+    const x=(e.clientX!=null?e.clientX:e.touches[0].clientX)-(r.left+r.width/2);
+    const y=(e.clientY!=null?e.clientY:e.touches[0].clientY)-(r.top+r.height/2);
+    let a=Math.atan2(x,-y)*180/Math.PI; if(a<0)a+=360; return a;
+  };
+  const go=function(e){
+    if(!drag) return;
+    const target=Math.round(angle(e)/6)%60;
+    let d=((target-ck2.m+90)%60)-30;
+    if(d!==0){ ckSetTotal(ckTotal()+d); ckPaint(); }
+    if(e.cancelable) e.preventDefault();
+  };
+  el.style.cursor="grab"; el.style.touchAction="none";
+  el.addEventListener("pointerdown",function(e){ ckStop(); drag=true; el.style.cursor="grabbing"; try{el.setPointerCapture(e.pointerId);}catch(_){} go(e); });
+  el.addEventListener("pointermove",go);
+  el.addEventListener("pointerup",function(){ drag=false; el.style.cursor="grab"; });
+  el.addEventListener("pointercancel",function(){ drag=false; });
+}
+function clockSVG(h,m,size,id){
+  const ha=(h%12)*30+m*0.5, ma=m*6;
+  let s='<svg '+(id?'id="'+id+'" ':'')+'viewBox="0 0 220 220" style="width:'+size+'px;height:'+size+'px;max-width:100%">';
+  s+='<circle cx="110" cy="110" r="102" fill="#fff" stroke="#2C3140" stroke-width="6"/>';
+  for(let i=0;i<60;i++){
+    const a=i*6*Math.PI/180, r1=i%5===0?86:92;
+    s+='<line x1="'+(110+r1*Math.sin(a))+'" y1="'+(110-r1*Math.cos(a))+'" x2="'+(110+98*Math.sin(a))+'" y2="'+(110-98*Math.cos(a))+'" stroke="#2C3140" stroke-width="'+(i%5===0?3:1.5)+'"/>';
+  }
+  for(let i=1;i<=12;i++){
+    const a=i*30*Math.PI/180;
+    s+='<text x="'+(110+72*Math.sin(a))+'" y="'+(110-72*Math.cos(a)+9)+'" font-size="24" font-weight="800" text-anchor="middle" fill="#2C3140">'+i+'</text>';
+    s+='<text x="'+(110+50*Math.sin(a))+'" y="'+(110-50*Math.cos(a)+7)+'" font-size="15" font-weight="700" text-anchor="middle" fill="#3B82F6">'+(i*5===60?0:i*5)+'</text>';
+  }
+  const har=ha*Math.PI/180, mar=ma*Math.PI/180;
+  s+='<line '+(id?'id="hH" ':'')+'x1="110" y1="110" x2="'+(110+46*Math.sin(har))+'" y2="'+(110-46*Math.cos(har))+'" stroke="#F97316" stroke-width="11" stroke-linecap="round"/>';
+  s+='<line '+(id?'id="hM" ':'')+'x1="110" y1="110" x2="'+(110+78*Math.sin(mar))+'" y2="'+(110-78*Math.cos(mar))+'" stroke="#3B82F6" stroke-width="6" stroke-linecap="round"/>';
+  s+='<circle cx="110" cy="110" r="7" fill="#2C3140"/></svg>';
+  return s;
+}
+function drawCK(){
+  const box=$("#toolwrap"); if(!box) return;
+  const read = ck2.mode==="read";
+  const t1=ck2.h*60+ck2.m, t2=ck2.h2*60+ck2.m2;
+  let gap=t2-t1; if(gap<0) gap+=720;
+  const gh=Math.floor(gap/60), gm=gap%60;
+  box.innerHTML=
+  '<div class="ctrls">'+
+    '<button class="btn '+(read?"purple":"ghost")+' sm" onclick="ckStop();ckMode(\'read\')">報讀 幾時幾分</button>'+
+    '<button class="btn '+(!read?"blue":"ghost")+' sm" onclick="ckStop();ckMode(\'gap\')">經過的時間</button>'+
+    '<button class="btn ghost sm" onclick="ckStop();ckRnd()">🎲 隨機出題</button></div>'+
+  (read?
+    '<div style="display:flex;gap:30px;flex-wrap:wrap;align-items:center">'+clockSVG(ck2.h,ck2.m,300,"ckMain")+
+     '<div style="flex:1;min-width:270px">'+
+       '<p style="font-size:19px;color:var(--ink2);font-weight:800;margin:0 0 8px">👆 '+zy("用手指／滑鼠直接抓著鐘面轉，時針會跟著慢慢走。")+'</p>'+
+       '<div class="ctrls"><label>時</label><button class="btn ghost sm" onclick="ckAdd(\'h\',-1)">－</button>'+
+       '<span class="pill" style="font-size:20px">'+ck2.h+'</span><button class="btn ghost sm" onclick="ckAdd(\'h\',1)">＋</button>'+
+       '<label>分</label><button class="btn ghost sm" onclick="ckAdd(\'m\',-5)">－5</button>'+
+       '<button class="btn ghost sm" onclick="ckAdd(\'m\',-1)">－1</button>'+
+       '<span class="pill" style="font-size:20px">'+ck2.m+'</span>'+
+       '<button class="btn ghost sm" onclick="ckAdd(\'m\',1)">＋1</button>'+
+       '<button class="btn ghost sm" onclick="ckAdd(\'m\',5)">＋5</button></div>'+
+       '<div class="ctrls"><button class="btn ghost sm" onclick="ckFast(-1)">⏪ 倒轉</button>'+
+       '<button id="ckSpinBtn" class="btn ghost sm" onclick="ckFast(1)">⏩ 快速旋轉</button>'+
+       '<button class="btn ghost sm" onclick="ckStop();ckAdd(\'h\',1)">跳 1 小時</button></div>'+
+       '<p id="ckLabel" style="font-size:44px;font-weight:900;margin:10px 0">'+ck2.h+' 時 '+ck2.m+' 分</p>'+
+       '<p id="ckHint" class="lp" style="margin:0">'+ckHintHTML()+'</p>'+
+       '<button class="btn green" style="margin-top:10px" onclick="speak(\''+ck2.h+'點'+ck2.m+'分\')">🔊 唸出來</button>'+
+     '</div></div>'
+   :
+    '<div style="display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start;justify-content:center">'+
+      '<div style="text-align:center"><b style="font-size:20px">開始</b><br>'+clockSVG(ck2.h,ck2.m,220,"ckMain")+
+        '<div class="ctrls" style="justify-content:center"><button class="btn ghost sm" onclick="ckAdd(\'h\',1)">時＋</button>'+
+        '<button class="btn ghost sm" onclick="ckAdd(\'m\',5)">分＋5</button></div>'+
+        '<div id="ckLabel" style="font-size:26px;font-weight:900">'+ck2.h+' 時 '+ck2.m+' 分</div></div>'+
+      '<div style="font-size:40px;align-self:center;color:var(--ink2)">→</div>'+
+      '<div style="text-align:center"><b style="font-size:20px">結束</b><br>'+clockSVG(ck2.h2,ck2.m2,220)+
+        '<div class="ctrls" style="justify-content:center"><button class="btn ghost sm" onclick="ckAdd(\'h2\',1)">時＋</button>'+
+        '<button class="btn ghost sm" onclick="ckAdd(\'m2\',5)">分＋5</button></div>'+
+        '<div style="font-size:26px;font-weight:900">'+ck2.h2+' 時 '+ck2.m2+' 分</div></div>'+
+    '</div>'+
+    '<p id="ckHint" style="display:none"></p>'+
+    '<div style="background:var(--blue-l);border-radius:16px;padding:16px 18px;margin-top:16px;font-size:22px;line-height:2">'+
+      zy("經過的時間 ＝ "+(gh?gh+" 小時 ":"")+(gm?gm+" 分":(gh?"":"0 分"))+
+         "　（做法：先從 "+ck2.h+" 時 "+ck2.m+" 分 數到整點，再往下數剩下的分。）")+'</div>');
+  ckBind();
+}
+
+/* ---- 4. 月曆教具：加上「共幾天（含頭尾）」 ---- */
+cal.mode="week"; cal.d1=null; cal.d2=null;
+function calMode(m){ cal.mode=m; cal.d1=null; cal.d2=null; cal.sel=null; tCal(); }
+window.calMode=calMode;
+function calSel(d){
+  if(cal.mode==="week"){ cal.sel=d; }
+  else {
+    if(cal.d1===null || (cal.d1!==null && cal.d2!==null)){ cal.d1={y:cal.y,m:cal.m,d:d}; cal.d2=null; }
+    else {
+      const a=new Date(cal.d1.y,cal.d1.m-1,cal.d1.d), b=new Date(cal.y,cal.m-1,d);
+      if(b<a){ cal.d2=cal.d1; cal.d1={y:cal.y,m:cal.m,d:d}; }
+      else cal.d2={y:cal.y,m:cal.m,d:d};
+    }
+  }
+  tCal();
+}
+window.calSel=calSel;
+function tCal(){
+  const box=$("#toolwrap"); if(!box) return;
+  const first=new Date(cal.y,cal.m-1,1).getDay();
+  const days=new Date(cal.y,cal.m,0).getDate();
+  const wk=["日","一","二","三","四","五","六"];
+  const span = cal.mode==="span";
+  const d1=cal.d1, d2=cal.d2;
+  const t=function(o){ return o? new Date(o.y,o.m-1,o.d).getTime():null; };
+  const T1=t(d1), T2=t(d2);
+  let g='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;max-width:560px">';
+  wk.forEach(function(w){ g+='<div style="text-align:center;font-weight:900;color:var(--ink2);padding:6px">'+w+'</div>'; });
+  for(let i=0;i<first;i++) g+='<div></div>';
+  for(let d=1;d<=days;d++){
+    const cur=new Date(cal.y,cal.m-1,d).getTime();
+    let bg="#fff", bd="var(--line)", col="var(--ink)", tag="";
+    if(span){
+      if(T1&&cur===T1){ bg="var(--green)"; bd="var(--green)"; col="#fff"; tag="起"; }
+      else if(T2&&cur===T2){ bg="var(--red)"; bd="var(--red)"; col="#fff"; tag="迄"; }
+      else if(T1&&T2&&cur>T1&&cur<T2){ bg="var(--orange-l)"; bd="var(--orange)"; col="var(--orange)"; }
+    }else if(cal.sel===d){ bg="var(--purple)"; bd="var(--purple)"; col="#fff"; }
+    g+='<button onclick="calSel('+d+')" style="position:relative;aspect-ratio:1;border-radius:10px;border:2px solid '+bd+
+       ';background:'+bg+';color:'+col+';font-weight:800;font-size:18px">'+d+
+       (tag?'<span style="position:absolute;top:1px;right:4px;font-size:11px">'+tag+'</span>':'')+'</button>';
+  }
+  g+='</div>';
+
+  let info="";
+  if(span){
+    if(!T1) info='<p class="sub" style="font-size:19px;margin-top:14px">👆 '+zy("先點「開始」的日期，再點「結束」的日期。（可以換月份再點結束日）")+'</p>';
+    else if(!T2) info='<p class="sub" style="font-size:19px;margin-top:14px">'+zy("已經選了開始日 "+d1.m+" 月 "+d1.d+" 日，再點一個結束日。")+'</p>';
+    else{
+      const total=Math.round((T2-T1)/86400000)+1;
+      const sameM = d1.m===d2.m && d1.y===d2.y;
+      const dm=new Date(d1.y,d1.m,0).getDate();
+      info='<div style="margin-top:16px;background:var(--blue-l);border:3px solid var(--blue);border-radius:18px;padding:16px 18px">'+
+       '<div style="font-size:24px;font-weight:900;margin-bottom:8px">'+zy("從 "+d1.m+" 月 "+d1.d+" 日 到 "+d2.m+" 月 "+d2.d+" 日，一共有幾天？")+'</div>'+
+       (sameM
+        ? '<div style="font-size:22px;line-height:2.1">'+
+            '<div>① '+zy("先相減："+d2.d+" － "+d1.d+" ＝ "+(d2.d-d1.d))+'</div>'+
+            '<div style="color:var(--red);font-weight:900">② '+zy("可是「"+d1.d+" 日」那一天也要算進去，所以要再 ＋1！")+'</div>'+
+            '<div>③ '+zy((d2.d-d1.d)+" ＋ 1 ＝ "+total+" 天")+'</div></div>'
+        : '<div style="font-size:22px;line-height:2.1">'+
+            '<div>① '+zy(d1.m+" 月："+d1.d+" 日 到 "+dm+" 日，共 "+(dm-d1.d+1)+" 天（"+dm+" － "+d1.d+" ＋ 1）")+'</div>'+
+            '<div>② '+zy(d2.m+" 月：1 日 到 "+d2.d+" 日，共 "+d2.d+" 天")+'</div>'+
+            '<div>③ '+zy((dm-d1.d+1)+" ＋ "+d2.d+" ＝ "+total+" 天")+'</div></div>')+
+       '<div style="margin-top:10px;background:#fff;border-radius:12px;padding:10px 14px;font-size:20px">'+
+         zy("一天一天數也可以：")+' '+
+         (function(){ let s="",n=0; for(let x=T1;x<=T2&&n<40;x+=86400000,n++){ const dd=new Date(x); s+='<span style="display:inline-block;margin:2px 4px;font-weight:800">'+(dd.getMonth()+1)+'/'+dd.getDate()+'</span>'; }
+           return s+(n>=40?" …":""); })()+
+       '</div>'+
+       '<p style="font-size:30px;font-weight:900;color:var(--blue);margin:12px 0 0">'+zy("答案：共 "+total+" 天")+'</p>'+
+       '<div style="margin-top:8px"><button class="btn ghost sm" onclick="calMode(\'span\')">重新選日期</button></div></div>';
+    }
+  }else if(cal.sel){
+    const w=new Date(cal.y,cal.m-1,cal.sel).getDay();
+    const nd=new Date(cal.y,cal.m-1,cal.sel); nd.setDate(nd.getDate()+cal.plus);
+    info='<div class="grid statgrid" style="margin-top:16px">'+
+      '<div class="stat"><b style="font-size:26px">'+cal.m+'月'+cal.sel+'日</b><span>選到的日期</span></div>'+
+      '<div class="stat"><b style="font-size:26px">星期'+wk[w]+'</b><span>是星期幾</span></div>'+
+      '<div class="stat"><b style="font-size:26px">'+(nd.getMonth()+1)+'月'+nd.getDate()+'日</b><span>再過 '+cal.plus+' 天</span></div>'+
+      '<div class="stat"><b style="font-size:26px">星期'+wk[nd.getDay()]+'</b><span>那天是星期幾</span></div></div>'+
+      '<p style="margin-top:10px;font-size:18px;color:var(--ink2)">'+zy("小提醒：每過 7 天就會回到同一個星期幾。")+'</p>';
+  }
+  box.innerHTML=
+  '<div class="ctrls">'+
+    '<button class="btn '+(!span?"purple":"ghost")+' sm" onclick="calMode(\'week\')">星期幾／再過幾天</button>'+
+    '<button class="btn '+(span?"blue":"ghost")+' sm" onclick="calMode(\'span\')">共幾天（含頭尾）</button></div>'+
+  '<div class="ctrls"><button class="btn ghost sm" onclick="calM(-1)">◀</button>'+
+   '<span class="pill" style="font-size:20px">'+cal.y+' 年 '+cal.m+' 月</span>'+
+   '<button class="btn ghost sm" onclick="calM(1)">▶</button>'+
+   (span?'':'<label>再過幾天</label><input type="number" value="'+cal.plus+'" onchange="calPlus(this.value)" style="width:80px">')+
+   '</div>'+g+info;
+}
 
 /* =============================== 啟動 =============================== */
 $("#btnZhuyin").onclick=function(){ S.zhuyin=!S.zhuyin; saveState(); syncToggles(); if(SESS) renderQ(); else render(); };
